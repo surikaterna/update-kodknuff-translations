@@ -1,7 +1,7 @@
 {
-  "name": "javascript-action",
+  "name": "update-kodknuff-translations",
   "version": "1.0.0",
-  "description": "JavaScript Action Template",
+  "description": "Update Kodknuff with the latest version of translations",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
@@ -11,21 +11,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/javascript-action.git"
+    "url": "git+https://github.com/surikaterna/update-kodknuff-translations.git"
   },
-  "keywords": [
-    "GitHub",
-    "Actions",
-    "JavaScript"
-  ],
-  "author": "",
+  "author": "Surikat",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/actions/javascript-action/issues"
+    "url": "https://github.com/surikaterna/update-kodknuff-translations/issues"
   },
-  "homepage": "https://github.com/actions/javascript-action#readme",
+  "homepage": "https://github.com/surikaterna/update-kodknuff-translations#readme",
   "dependencies": {
-    "@actions/core": "^1.2.5"
+    "@actions/core": "^1.2.5",
+    "cross-fetch": "^3.1.4"
   },
   "devDependencies": {
     "@vercel/ncc": "^0.31.1",

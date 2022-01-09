@@ -1,13 +1,20 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: 'Update Kodknuff Translations'
+description: 'Update kodknuff translations to the latest version'
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  packagePath:
+    description: 'relative path to package.json'
     required: true
-    default: '1000'
+    default: './package.json'
+  translationsPath:
+    description: 'relative path to the module exporting the translations'
+    required: true
+    default: './index'
+  artifact:
+    description: 'The name of the artifact in Kodknuff to update'
+    required: true
 outputs:
-  time: # output will be available to future steps
-    description: 'The current time after waiting'
+  version:
+    description: 'The version of the translations that were published'
 runs:
   using: 'node12'
   main: 'dist/index.js'

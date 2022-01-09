@@ -1,18 +1,30 @@
 const core = require('@actions/core');
-const wait = require('./wait');
+const { readTranslations } = require('./readTranslations');
+const { readVersion } = require('./readVersion');
+const { publishTranslations } = require('./publishTranslations');
 
-
-// most @actions toolkit packages have async methods
 async function run() {
   try {
-    const ms = core.getInput('milliseconds');
-    core.info(`Waiting ${ms} milliseconds ...`);
+    const packagePath = core.getInput('packagePath') || './package.json';
+    core.info(`Reading version from ${packagePath}`);
+    const version = await readVersion(packagePath);
+    core.info(`Version is ${version}`);
 
-    core.debug((new Date()).toTimeString()); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-    await wait(parseInt(ms));
-    core.info((new Date()).toTimeString());
+    const translationsPath = core.getInput('translationsPath') || './index';
+    core.info(`Reading translations from ${translationsPath}`);
+    const translations = await readTranslations(translationsPath);
 
-    core.setOutput('time', new Date().toTimeString());
+    core.info('Translations read. Will publish.');
+    const artifact = core.getInput('artifact');
+    const response = await publishTranslations(translations, version, artifact);
+
+    if (response) {
+      core.info(`Published version "${version}" successfully.`);
+    } else {
+      core.info(`Failed to publish version "${version}".`);
+    }
+
+    core.setOutput('version', version);
   } catch (error) {
     core.setFailed(error.message);
   }

@@ -1,24 +1,24 @@
-const wait = require('./wait');
 const process = require('process');
 const cp = require('child_process');
 const path = require('path');
+const { readVersion } = require('./readVersion');
+const { readTranslations } = require('./readTranslations');
 
-test('throws invalid number', async () => {
-  await expect(wait('foo')).rejects.toThrow('milliseconds not a number');
+test('reads package version', async () => {
+  const version = await readVersion('./package.json');
+  expect(version).toBe('1.0.0');
 });
 
-test('wait 500 ms', async () => {
-  const start = new Date();
-  await wait(500);
-  const end = new Date();
-  var delta = Math.abs(end - start);
-  expect(delta).toBeGreaterThanOrEqual(500);
+test('reads language data', async () => {
+  const translations = await readTranslations('./testData');
+  const parsedTranslations = JSON.parse(translations);
+  expect(parsedTranslations.se.hi).toBe('hej');
 });
 
 // shows how the runner will run a javascript action with env / stdout protocol
 test('test runs', () => {
-  process.env['INPUT_MILLISECONDS'] = 100;
   const ip = path.join(__dirname, 'index.js');
+  console.log({ ip });
   const result = cp.execSync(`node ${ip}`, {env: process.env}).toString();
   console.log(result);
 })
