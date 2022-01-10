@@ -3527,12 +3527,12 @@ async function run() {
     const version = await readVersion(packagePath);
     core.info(`Version is ${version}`);
 
-    const translationsPath = core.getInput('translationsPath') || './index';
+    const translationsPath = core.getInput('translationsPath') || './testData';
     core.info(`Reading translations from ${translationsPath}`);
     const translations = await readTranslations(translationsPath);
 
     core.info('Translations read. Will publish.');
-    const artifact = core.getInput('artifact');
+    const artifact = core.getInput('artifact') || 'test-translations';
     const response = await publishTranslations(translations, version, artifact);
 
     if (response) {

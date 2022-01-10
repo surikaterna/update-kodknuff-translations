@@ -45,3 +45,13 @@ jobs:
           KODKNUFF_TOKEN: ${{ secrets.KODKNUFF_TOKEN }}
 ```
 
+## Development
+
+Expected input and output are defined in `action.yml`.
+
+1. Update the logic in `index.js`
+2. Add tests in `index.test.js`
+3. Run `npm run prepare` to update the dist (trigger)
+
+`index.js` is the root of the action logic, but the action will be triggered from the versioned `dist` directory. So
+before committing, run `npm run prepare` to trigger a new build to be included in the commit.
