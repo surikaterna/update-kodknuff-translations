@@ -21,6 +21,8 @@ async function publishTranslations(translations, version, artifact) {
     return;
   }
 
+  core.debug(`Translation keys: ${Object.keys(JSON.parse(translations))}`);
+
   return await fetch(`${url}/kod/${artifact}/${version}`, {
     method: 'PUT',
     body: translations,
