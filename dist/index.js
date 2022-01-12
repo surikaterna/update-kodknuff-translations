@@ -3358,10 +3358,13 @@ module.exports.readTranslations = readTranslations;
 /***/ 486:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
+const core = __nccwpck_require__(186);
 const { readAsync } = __nccwpck_require__(504);
 
 async function readVersion(packagePath) {
   const packageJson = await readAsync(packagePath);
+  core.info('Read package:');
+  core.info(JSON.stringify(packageJson, null, 2));
   return packageJson.version;
 }
 
