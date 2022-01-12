@@ -12,6 +12,9 @@ inputs:
   artifact:
     description: 'The name of the artifact in Kodknuff to update'
     required: true
+  os:
+    description: '"win" or "unix"'
+    default: 'unix'
 outputs:
   version:
     description: 'The version of the translations that were published'

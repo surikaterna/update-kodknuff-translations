@@ -1,6 +1,6 @@
 {
   "name": "update-kodknuff-translations",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Update Kodknuff with the latest version of translations",
   "main": "index.js",
   "scripts": {

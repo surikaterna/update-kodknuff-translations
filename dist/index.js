@@ -3381,6 +3381,14 @@ module.exports = require("assert");
 
 /***/ }),
 
+/***/ 129:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("child_process");
+
+/***/ }),
+
 /***/ 614:
 /***/ ((module) => {
 
@@ -3519,12 +3527,28 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const core = __nccwpck_require__(186);
+const { exec } = __nccwpck_require__(129);
 const { readTranslations } = __nccwpck_require__(151);
 const { readVersion } = __nccwpck_require__(486);
 const { publishTranslations } = __nccwpck_require__(746);
 
 async function run() {
   try {
+    const os = core.getInput('os');
+    core.info(`Run on OS ${os}`);
+
+    if (os) {
+      exec(os === 'win' ? 'dir' : 'ls -la', (error, stdout, stderr) => {
+        if (error) {
+          core.error(error);
+          return;
+        }
+
+        core.info(`stdout: ${stdout}`);
+        core.error(`stderr: ${stderr}`);
+      });
+    }
+
     const packagePath = core.getInput('packagePath') || './package.json';
     core.info(`Reading version from ${packagePath}`);
     const version = await readVersion(packagePath);
@@ -3539,8 +3563,6 @@ async function run() {
     const response = await publishTranslations(translations, version, artifact);
 
     if (response) {
-      core.info(`Got response`);
-      core.debug(`Response ${response}`);
       core.info(`Published version "${version}" successfully.`);
     } else {
       core.info(`Failed to publish version "${version}".`);
