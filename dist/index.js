@@ -3331,12 +3331,17 @@ module.exports.readAsync = readAsync;
 /***/ }),
 
 /***/ 151:
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const core = __nccwpck_require__(186);
+const path = __nccwpck_require__(622);
 
 async function readTranslations(translationsPath) {
-  const path = translationsPath || './index';
+  const relativePath = translationsPath || './index';
+  const absolutePath = path.join(__dirname, relativePath);
   const translations = {};
-  const loadedTranslations = require(path);
+  const loadedTranslations = require(absolutePath);
+  core.info(`Absolute path: ${absolutePath}`);
 
   Object.keys(loadedTranslations).forEach((key) => {
     translations[key] = loadedTranslations[key];
