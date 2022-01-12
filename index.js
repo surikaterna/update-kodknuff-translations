@@ -7,6 +7,7 @@ const { publishTranslations } = require('./publishTranslations');
 async function run() {
   try {
     const os = core.getInput('os');
+    const translationsPath = core.getInput('translationsPath') || './testData';
     core.info(`Run on OS ${os}`);
 
     if (os) {
@@ -19,6 +20,18 @@ async function run() {
         core.info(`stdout: ${stdout}`);
         core.error(`stderr: ${stderr}`);
       });
+
+      if (os === 'unix') {
+        exec(`cat ${translationsPath}`, (error, stdout, stderr) => {
+          if (error) {
+            core.error(error);
+            return;
+          }
+
+          core.info(`stdout: ${stdout}`);
+          core.error(`stderr: ${stderr}`);
+        });
+      }
     }
 
     const packagePath = core.getInput('packagePath') || './package.json';
@@ -26,7 +39,6 @@ async function run() {
     const version = await readVersion(packagePath);
     core.info(`Version is ${version}`);
 
-    const translationsPath = core.getInput('translationsPath') || './testData';
     core.info(`Reading translations from ${translationsPath}`);
     const translations = await readTranslations(translationsPath);
 
