@@ -19,6 +19,8 @@ async function run() {
     const response = await publishTranslations(translations, version, artifact);
 
     if (response) {
+      core.info(`Got response`);
+      core.debug(`Response ${response}`);
       core.info(`Published version "${version}" successfully.`);
     } else {
       core.info(`Failed to publish version "${version}".`);

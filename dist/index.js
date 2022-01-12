@@ -3269,6 +3269,9 @@ async function publishTranslations(translations, version, artifact) {
   const url = process.env.KODKNUFF_URL;
   const token = process.env.KODKNUFF_TOKEN;
 
+  core.notice('publishTranslations');
+
+
   if (!url) {
     core.notice('Secret: KODKNUFF_URL is missing.');
   }
@@ -3285,7 +3288,7 @@ async function publishTranslations(translations, version, artifact) {
     return;
   }
 
-  core.debug(`Translation keys: ${Object.keys(JSON.parse(translations))}`);
+  core.notice(`Translation keys: ${Object.keys(JSON.parse(translations))}`);
 
   return await fetch(`${url}/kod/${artifact}/${version}`, {
     method: 'PUT',
@@ -3536,6 +3539,8 @@ async function run() {
     const response = await publishTranslations(translations, version, artifact);
 
     if (response) {
+      core.info(`Got response`);
+      core.debug(`Response ${response}`);
       core.info(`Published version "${version}" successfully.`);
     } else {
       core.info(`Failed to publish version "${version}".`);
