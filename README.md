@@ -89,7 +89,7 @@ Targeted Linux smoke: the rebuilt bundle ran through the manifest's Bash command
 on Node.js 22.23.4 against a local Brotli-encoded Kodknuff API fixture. Translation
 loading, Bearer authentication, publication and the version output mapping passed.
 `npm ci` also completed its `prepare` lifecycle using ncc 0.38.4 on Node.js 22.23.4.
-No exploit payloads, Windows/macOS runs or local full suite were performed.
+No exploit payloads, Windows/macOS runs or lint checks were performed.
 Bundle output still uses the existing legacy Actions output command.
 
 The first hosted CI run exposed the old bundler failure above and a pre-existing
@@ -99,3 +99,11 @@ does not prove bootstrap runtime remediation. The hosted action graph job report
 success but had no Kodknuff secrets, an obsolete `milliseconds` input and missing
 `./index` diagnostics; it did not verify real publication. Provider rollout or a
 patched self-hosted runner is still required for the setup-node bootstrap.
+
+After the compatibility correction, hosted `check-dist` passed. The unit job
+then exposed a pre-existing assertion comparing the package's version with a
+stale `1.0.0` literal rather than testing behavior. That standalone incidental
+version test was deleted, not re-pinned; both remaining tests are preserved.
+Targeted `npm test -- --runInBand index.test.js` on Node.js 22.23.4 passed:
+one suite, two tests. No authenticated hosted publication or final hosted
+unit result is claimed.
