@@ -60,11 +60,13 @@ before committing, run `npm run prepare` to trigger a new build to be included i
 ## Runtime security and compatibility
 
 For CVE-2026-111497, this composite action installs **Node.js 22.23.4** with
-commit-pinned `actions/setup-node` and runs the existing `dist/index.js` bundle.
+commit-pinned `actions/setup-node` and runs the checked-in `dist/index.js` bundle.
 All four inputs/defaults and the `version` output are preserved.
 `KODKNUFF_URL` and `KODKNUFF_TOKEN` remain inherited from the caller's environment;
-HTTP decompression remains enabled. No application code or dependencies changed,
-so this runtime-only change does not require rebuilding `dist`.
+HTTP decompression remains enabled. Application source/runtime dependencies are
+unchanged. The development bundler is pinned to `@vercel/ncc` 0.38.4 because
+0.31.1 fails on Node.js 22/OpenSSL 3 with `ERR_OSSL_EVP_UNSUPPORTED`; `dist` was
+regenerated with the compatible bundler. No OpenSSL legacy-provider override is used.
 
 Use GitHub Actions runner **2.338.1 or newer with patched embedded Node.js**:
 [runner 2.338.1](https://github.com/actions/runner/releases/tag/v2.338.1)
@@ -83,8 +85,17 @@ Update self-hosted runners and rerun workflows to activate the fix; no deploymen
 was performed. See the
 [Node.js security release](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases).
 
-Targeted Linux smoke: the unchanged bundle ran through the manifest's Bash command
+Targeted Linux smoke: the rebuilt bundle ran through the manifest's Bash command
 on Node.js 22.23.4 against a local Brotli-encoded Kodknuff API fixture. Translation
 loading, Bearer authentication, publication and the version output mapping passed.
-Hosted Actions and Windows/macOS were not exercised; no exploit payloads or full
-suite were run. Bundle output still uses the existing legacy Actions output command.
+`npm ci` also completed its `prepare` lifecycle using ncc 0.38.4 on Node.js 22.23.4.
+No exploit payloads, Windows/macOS runs or local full suite were performed.
+Bundle output still uses the existing legacy Actions output command.
+
+The first hosted CI run exposed the old bundler failure above and a pre-existing
+retired `actions/upload-artifact@v2` selector; the latter now uses commit-pinned v4.
+That run used runner **2.338.0**, below the required patched runner version, so it
+does not prove bootstrap runtime remediation. The hosted action graph job reported
+success but had no Kodknuff secrets, an obsolete `milliseconds` input and missing
+`./index` diagnostics; it did not verify real publication. Provider rollout or a
+patched self-hosted runner is still required for the setup-node bootstrap.
