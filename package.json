@@ -3,6 +3,9 @@
   "version": "1.0.2",
   "description": "Update Kodknuff with the latest version of translations",
   "main": "index.js",
+  "engines": {
+    "node": "^22.23.4 || ^24.22.1 || >=26.12.1"
+  },
   "scripts": {
     "lint": "eslint .",
     "prepare": "ncc build index.js -o dist --source-map --license licenses.txt",
